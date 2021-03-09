@@ -27,19 +27,19 @@ class cube(object):
         if eyes:
             centre = distance // 2
             radius = 3
-            circleMiddle = (i*distance+centre-radius, j*distance+8) # ojo 1
-            circleMiddle2 = (i*distance + distance - radius*2, j*distance+8) # ojo 2
+            circleMiddle = (i*distance+centre-radius, j*distance+8) # eye 1
+            circleMiddle2 = (i*distance + distance - radius*2, j*distance+8) # eye 2
             pygame.draw.circle(surface, (0,0,0), circleMiddle, radius)
             pygame.draw.circle(surface, (0,0,0), circleMiddle2, radius)
 
 
-class snake(object): # el objeto serpiente está compuesto de cubos
+class snake(object): # the snake object is going to be defined by cubes
     body = []
     turns = {}
     def __init__(self, color, pos):
         self.color = color
         self.head = cube(pos)
-        self.body.append(self.head) # juntamos el cuerpo y la cabeza
+        self.body.append(self.head) # join the body and the head
         self.dirnx = 0 # initial movement
         self.dirny = 1
 
@@ -48,28 +48,28 @@ class snake(object): # el objeto serpiente está compuesto de cubos
             if event.type == pygame.QUIT:
                 pygame.quit()
 
-            keys = pygame.key.get_pressed() # coge la tecla pulsada
+            keys = pygame.key.get_pressed() # get the pressed key
 
             for key in keys:
                 if keys[pygame.K_LEFT]:
                     self.dirnx = -1
                     self.dirny = 0
-                    self.turns[self.head.pos[:]] = [self.dirnx, self.dirny] # posicion de la cabeza = posicion a la que giramos
+                    self.turns[self.head.pos[:]] = [self.dirnx, self.dirny] # position of the head = position towards we move to
 
                 elif keys[pygame.K_RIGHT]:
                     self.dirnx = 1
                     self.dirny = 0
-                    self.turns[self.head.pos[:]] = [self.dirnx, self.dirny] # posicion de la cabeza = posicion a la que giramos
+                    self.turns[self.head.pos[:]] = [self.dirnx, self.dirny] # position of the head = position towards we move to
                     
                 elif keys[pygame.K_UP]:
                     self.dirnx = 0
                     self.dirny = -1
-                    self.turns[self.head.pos[:]] = [self.dirnx, self.dirny] # posicion de la cabeza = posicion a la que giramos
+                    self.turns[self.head.pos[:]] = [self.dirnx, self.dirny] # position of the head = position towards we move to
                     
                 elif keys[pygame.K_DOWN]:
                     self.dirnx = 0
                     self.dirny = 1
-                    self.turns[self.head.pos[:]] = [self.dirnx, self.dirny] # posicion de la cabeza = posicion a la que giramos
+                    self.turns[self.head.pos[:]] = [self.dirnx, self.dirny] # position of the head = position towards we move to
 
 
         for i, c in enumerate(self.body):
@@ -77,9 +77,9 @@ class snake(object): # el objeto serpiente está compuesto de cubos
             if p in self.turns:
                 turn = self.turns[p]
                 c.move(turn[0], turn[1])
-                if i == len(self.body)-1: # si estamos en el ultimo cubo...
-                    self.turns.pop(p) #...borramos ese giro
-            else: # comprobar si estamos en los bordes del mapa
+                if i == len(self.body)-1: # if we are in the last cube...
+                    self.turns.pop(p) #...erase that turn
+            else: # check if we are in the edges of the board
                 if c.dirnx == -1 and c.pos[0] <= 0: c.pos = (c.rows-1, c.pos[1])
                 elif c.dirnx == 1 and c.pos[0] >= c.rows-1: c.pos = (0, c.pos[1])
                 elif c.dirny == 1 and c.pos[1] >= c.rows-1: c.pos = (c.pos[0], 0)
@@ -116,7 +116,7 @@ class snake(object): # el objeto serpiente está compuesto de cubos
     def draw(self, surface):
         for i, c in enumerate(self.body):
             if i == 0:
-                c.draw(surface, True) # True lo unico que hace es indicarnos si estamos en el primero cubo para pintar los ojos
+                c.draw(surface, True) # What True does is to indicate us if we are in the first cube to paint the eyes
             else:
                 c.draw(surface)
 
@@ -149,7 +149,7 @@ def randomSnack(rows, item):
     while True:
         x = random.randrange(rows) # row
         y = random.randrange(rows) # column
-        if len(list(filter(lambda z:z.pos == (x,y), positions))) > 0: # compruebo que no pongamos la comida encima de la serpiente, es decir, que siempre va a aparecer en una posicion del tablero no ocupada por la serpiente
+        if len(list(filter(lambda z:z.pos == (x,y), positions))) > 0: # check that we son't put the snack over the snack (it is always going to appear on a free position)
             continue
         else:
             break
@@ -158,8 +158,8 @@ def randomSnack(rows, item):
 
 
 def message_box(subject, content):
-    root = tk.Tk() # nueva ventana
-    root.attributes("-topmost", True) # hacemos que la ventana esté por encima de todo
+    root = tk.Tk() # new window
+    root.attributes("-topmost", True) # this new window is above the rest of the windows
     root.withdraw()
     messagebox.showinfo(subject, content)
     try:
@@ -172,7 +172,7 @@ def main():
     global width, rows, s, snack
     width = 500
     rows = 20
-    win = pygame.display.set_mode((width, width)) # porque es un cuadrado
+    win = pygame.display.set_mode((width, width)) # because it is a square
     s = snake((255,0,0), (10,10))
     snack = cube(randomSnack(rows, s), color=(0,255,0))
 
@@ -180,17 +180,17 @@ def main():
     clock = pygame.time.Clock()
 
     while flag:
-        pygame.time.delay(50) # delay de 50ms (cuanto más bajo, más rápido)
+        pygame.time.delay(50) # delay of 50ms (the lower, the fastest)
         clock.tick(10)
         s.move()
-        if s.body[0].pos == snack.pos: # si la cabeza toca la comida, nos la comemos
-            s.addCube() # alargamos el cuerpo
-            snack = cube(randomSnack(rows, s), color=(0,255,0)) # y generamos un nuevo snack
+        if s.body[0].pos == snack.pos: # if the head touches the snack, we eat it
+            s.addCube() # enlarge the body
+            snack = cube(randomSnack(rows, s), color=(0,255,0)) # and generate a new snack
 
         for x in range(len(s.body)):
-            if s.body[x].pos in list(map(lambda z:z.pos, s.body[x+1:])): # compruebo si en algun momento estamos sobre el cuerpo de la propia serpiente
-                print('Puntuacion: ', len(s.body))
-                message_box('HAS PERDIDO!', 'Juega de nuevo...')
+            if s.body[x].pos in list(map(lambda z:z.pos, s.body[x+1:])): # check if we are over the snake body
+                print('Score: ', len(s.body))
+                message_box('YOU LOSE!', 'Play again...')
                 s.reset((10,10))
                 break
 
